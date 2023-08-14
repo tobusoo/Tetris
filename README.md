@@ -1,2 +1,2 @@
 # Tetris
-Tetris in c++ + SFML
+Tetris in c++ and SFML
