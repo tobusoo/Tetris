@@ -1,7 +1,12 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(app VERSION 0.0)
+project(tetris VERSION 0.0)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-add_executable(app main.cpp)
+set(FLAGS "-Wall -g -I include")
+	add_definitions(${FLAGS})
+
+add_executable(tetris main.cpp)
+find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
+target_link_libraries(tetris sfml-graphics sfml-audio)
