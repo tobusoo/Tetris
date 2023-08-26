@@ -7,6 +7,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(FLAGS "-Wall -g -I include")
 	add_definitions(${FLAGS})
 
-add_executable(tetris main.cpp)
+add_executable(tetris src/main.cpp)
 find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
 target_link_libraries(tetris sfml-graphics sfml-audio)
