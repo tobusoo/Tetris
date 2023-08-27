@@ -9,11 +9,28 @@ public:
     {
         color = sf::Color::Blue;
         for (int i = 0; i < 4; i++) {
-            position[i] = sf::Vector2i(pos.x, pos.y + i);
+            position[i] = sf::Vector2i(pos.x + i, pos.y);
         }
     }
 
     void rotate() noexcept
     {
+        if (state == 0) {
+            state = 1;
+            prev_state = 0;
+
+            position[0] += sf::Vector2i(1, -1);
+            // position[1] += sf::Vector2i(0, 0);
+            position[2] += sf::Vector2i(-1, 1);
+            position[3] += sf::Vector2i(-2, 2);
+        } else if (state == 1) {
+            state = 0;
+            prev_state = 1;
+
+            position[0] += sf::Vector2i(-1, 1);
+            // position[1] += sf::Vector2i(0, 0);
+            position[2] += sf::Vector2i(1, -1);
+            position[3] += sf::Vector2i(2, -2);
+        }
     }
 };

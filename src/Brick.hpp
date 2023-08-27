@@ -13,16 +13,16 @@ public:
 
     virtual void rotate() noexcept = 0;
 
-    const sf::Vector2i* get_position() const
-    {
-        return position;
-    }
-
     void write_position(sf::Vector2i prev_array[4])
     {
         for (int i = 0; i < 4; i++) {
             prev_array[i] = position[i];
         }
+    }
+
+    void reset_state()
+    {
+        state = prev_state;
     }
 
     sf::Vector2i get_leftmost_position() const noexcept
@@ -51,6 +51,19 @@ public:
         return rightmost;
     }
 
+    sf::Vector2i get_highter_position() const noexcept
+    {
+        sf::Vector2i highter = {position[0].x, position[0].y};
+
+        for (int i = 1; i < 4; i++) {
+            if (position[i].y < highter.y) {
+                highter = position[i];
+            }
+        }
+
+        return highter;
+    }
+
     const sf::Color get_color() const
     {
         return color;
@@ -62,7 +75,20 @@ public:
             position[i] = pos[i];
     }
 
-    void move(sf::Vector2i dxdy) noexcept
+    bool is_out_of_screen()
+    {
+        sf::Vector2i leftmost = get_leftmost_position();
+        sf::Vector2i rightmost = get_rightmost_position();
+        sf::Vector2i highter = get_highter_position();
+
+        if (leftmost.x < 0 || rightmost.x > M - 1 || highter.y < 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    void move(sf::Vector2i dxdy, bool check_collision = true) noexcept
     {
         sf::Vector2i prev_pos[4];
         write_position(prev_pos);
@@ -70,16 +96,13 @@ public:
         for (auto& i : position)
             i += dxdy;
 
-        sf::Vector2i leftmost = get_leftmost_position();
-        sf::Vector2i rightmost = get_rightmost_position();
-
-        if (leftmost.x < 0) {
-            set_position(prev_pos);
-        } else if (rightmost.x > M - 1)
+        if (check_collision && is_out_of_screen())
             set_position(prev_pos);
     }
 
 protected:
     sf::Vector2i position[4];
     sf::Color color;
+    int state = 0;
+    int prev_state = 0;
 };

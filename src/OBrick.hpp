@@ -16,5 +16,6 @@ public:
 
     void rotate() noexcept
     {
+        // No need to rotate, because it's square.
     }
 };
