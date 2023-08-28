@@ -5,7 +5,7 @@
 
 class IBrick : public Brick {
 public:
-    IBrick(sf::Vector2i pos)
+    IBrick(sf::Vector2i pos) noexcept
     {
         color = sf::Color::Blue;
         for (int i = 0; i < 4; i++) {
@@ -13,6 +13,12 @@ public:
         }
     }
 
+    sf::Vector2i get_center_position() const noexcept
+    {
+        return position[1];
+    }
+
+    // TODO: Add 2 more states
     void rotate() noexcept
     {
         if (state == 0) {
