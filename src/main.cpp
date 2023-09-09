@@ -4,60 +4,11 @@
 #include <vector>
 
 #include "Bricks.h"
+#include "BricksGenerator.hpp"
 #include "Field.hpp"
+#include "NextBrickPanel.hpp"
 #include "Option.hpp"
-
-int b1 = 0;
-int b2 = 0;
-int b3 = 0;
-int b4 = 0;
-int b5 = 0;
-int b6 = 0;
-int b7 = 0;
-
-std::random_device random_device;
-std::default_random_engine random_engine(random_device());
-std::uniform_int_distribution<unsigned short> dist(0, 6);
-
-Brick* newBrick()
-{
-    unsigned short random = dist(random_engine);
-
-    sf::Vector2i pos(3, 0);
-    Brick* brick = nullptr;
-
-    switch (random) {
-    case 0:
-        brick = new IBrick(pos);
-        b1++;
-        break;
-    case 1:
-        brick = new JBrick(pos);
-        b2++;
-        break;
-    case 2:
-        brick = new LBrick(pos);
-        b3++;
-        break;
-    case 3:
-        brick = new OBrick(pos);
-        b4++;
-        break;
-    case 4:
-        b5++;
-        brick = new SBrick(pos);
-        break;
-    case 5:
-        b6++;
-        brick = new TBrick(pos);
-        break;
-    case 6:
-        b7++;
-        brick = new ZBrick(pos);
-    }
-
-    return brick;
-}
+#include "StatisticPanel.hpp"
 
 int main()
 {
@@ -65,7 +16,7 @@ int main()
     sf::ContextSettings settings;
     settings.antialiasingLevel = 8;
 
-    sf::RenderWindow window(vmode, "op", sf::Style::Resize, settings);
+    sf::RenderWindow window(vmode, "Tetris", sf::Style::Resize, settings);
     window.setPosition(sf::Vector2i(200, 0));
     window.setFramerateLimit(144);
     sf::Event event;
@@ -73,16 +24,32 @@ int main()
     Field field(sf::Vector2f(
             WINDOW_WIDTH / 2 - CELL_SIZE * M / 2,
             WINDOW_HEIGTH / 2 - CELL_SIZE * M));
+    StatisticPanel stat_panel(
+            sf::Vector2f(WINDOW_WIDTH / 12, WINDOW_HEIGTH / 12),
+            sf::Vector2f(200, 400));
+    NextBrickPanel next_panel(sf::Vector2f(600, 50), sf::Vector2f(150, 150));
+    BricksGenerator generator;
 
-    Brick* brick = newBrick();
-
+    Brick* brick = generator.get_random_brick();
+    brick->move(sf::Vector2i(3, 0));
     field.set_brick(*brick, true);
+    stat_panel.increase_i_count(generator.get_last_i());
+
+    Brick* next_brick = generator.get_random_brick();
 
     sf::Vector2i movement;
     bool rotate_key = false;
     bool fast_down = false;
 
+    next_panel.set_brick_color(next_brick->get_color());
+    next_panel.set_brick(*next_brick);
+
+    sf::Clock time;
+    float dt;
     while (window.isOpen()) {
+        dt = time.getElapsedTime().asSeconds();
+        time.restart();
+
         while (window.pollEvent(event)) {
             switch (event.type) {
             case sf::Event::Closed:
@@ -106,37 +73,52 @@ int main()
             }
         }
 
-        field.update((*brick), movement, rotate_key, fast_down);
+        field.update((*brick), movement, dt, rotate_key, fast_down);
         movement = {0, 0};
         rotate_key = false;
         fast_down = false;
 
         if (field.collide(*brick) && field.need_new_brick()) {
+            stat_panel.increase_i_count(generator.get_last_i());
             field.set_brick(*brick);
             field.reset_time();
             delete brick;
-            brick = newBrick();
+
+            brick = next_brick;
+            brick->move(sf::Vector2i(3, 0));
+            next_brick = generator.get_random_brick();
+
+            next_panel.set_brick_color(next_brick->get_color());
+            next_panel.set_brick(*next_brick);
         }
 
         field.check_lines();
 
+        {
+            auto cur_lines = field.get_lines();
+            auto cur_score = field.get_score();
+
+            if (cur_lines > stat_panel.get_lines()) {
+                stat_panel.set_lines(cur_lines);
+                stat_panel.set_score(cur_score);
+            }
+        }
+
         window.clear();
         window.draw(field);
+        window.draw(next_panel);
+        window.draw(stat_panel);
         window.display();
 
         if (field.end()) {
-            std::cout << "game end\n";
+            delete next_brick;
+            delete brick;
             window.close();
         }
     }
-    std::cout << "statisic:\n";
-    std::cout << b1 << '\n';
-    std::cout << b2 << '\n';
-    std::cout << b3 << '\n';
-    std::cout << b4 << '\n';
-    std::cout << b5 << '\n';
-    std::cout << b6 << '\n';
-    std::cout << b7 << '\n';
+
+    std::cout << "Your score: " << stat_panel.get_score() << '\n';
+    std::cout << "Your Lines: " << stat_panel.get_lines() << '\n';
 
     return 0;
 }

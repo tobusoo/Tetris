@@ -18,7 +18,6 @@ public:
         return position[1];
     }
 
-    // TODO: Add 2 more states
     void rotate() noexcept
     {
         if (state == 0) {
