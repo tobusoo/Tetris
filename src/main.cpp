@@ -1,14 +1,12 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include <random>
-#include <vector>
 
-#include "Bricks.h"
-#include "BricksGenerator.hpp"
-#include "Field.hpp"
-#include "NextBrickPanel.hpp"
-#include "Option.hpp"
-#include "StatisticPanel.hpp"
+#include <Bricks.h>
+#include <BricksGenerator.hpp>
+#include <Field.hpp>
+#include <NextBrickPanel.hpp>
+#include <Option.hpp>
+#include <StatisticPanel.hpp>
 
 int main()
 {
@@ -16,9 +14,10 @@ int main()
     sf::ContextSettings settings;
     settings.antialiasingLevel = 8;
 
-    sf::RenderWindow window(vmode, "Tetris", sf::Style::Resize, settings);
+    sf::RenderWindow window(
+            vmode, "Tetris & Tobuso", sf::Style::Resize, settings);
     window.setPosition(sf::Vector2i(200, 0));
-    window.setFramerateLimit(144);
+    window.setFramerateLimit(FPS);
     sf::Event event;
 
     Field field(sf::Vector2f(
@@ -33,16 +32,15 @@ int main()
     Brick* brick = generator.get_random_brick();
     brick->move(sf::Vector2i(3, 0));
     field.set_brick(*brick, true);
-    stat_panel.increase_i_count(generator.get_last_i());
+    stat_panel.increase_i_brick(generator.get_last_i());
 
     Brick* next_brick = generator.get_random_brick();
+    next_panel.set_brick(*next_brick);
 
     sf::Vector2i movement;
-    bool rotate_key = false;
+    bool right_rotate = false;
+    bool left_rotate = false;
     bool fast_down = false;
-
-    next_panel.set_brick_color(next_brick->get_color());
-    next_panel.set_brick(*next_brick);
 
     sf::Clock time;
     float dt;
@@ -64,22 +62,26 @@ int main()
                     movement.x = -1;
                 if (event.key.code == sf::Keyboard::Right)
                     movement.x = 1;
+                if (event.key.code == sf::Keyboard::D)
+                    right_rotate = true;
+                if (event.key.code == sf::Keyboard::A)
+                    left_rotate = true;
                 if (event.key.code == sf::Keyboard::Space)
-                    rotate_key = true;
-                if (event.key.code == sf::Keyboard::Up)
                     fast_down = true;
             default:
                 break;
             }
         }
 
-        field.update((*brick), movement, dt, rotate_key, fast_down);
+        if (left_rotate)
+            std::cout << "Добавь уже левый поворот...\n";
+        field.update((*brick), movement, dt, right_rotate, fast_down);
         movement = {0, 0};
-        rotate_key = false;
+        right_rotate = false;
         fast_down = false;
 
         if (field.collide(*brick) && field.need_new_brick()) {
-            stat_panel.increase_i_count(generator.get_last_i());
+            stat_panel.increase_i_brick(generator.get_last_i());
             field.set_brick(*brick);
             field.reset_time();
             delete brick;
@@ -88,23 +90,20 @@ int main()
             brick->move(sf::Vector2i(3, 0));
             next_brick = generator.get_random_brick();
 
-            next_panel.set_brick_color(next_brick->get_color());
             next_panel.set_brick(*next_brick);
         }
 
         field.check_lines();
 
-        {
-            auto cur_lines = field.get_lines();
-            auto cur_score = field.get_score();
+        size_t current_lines = field.get_lines();
+        size_t current_score = field.get_score();
 
-            if (cur_lines > stat_panel.get_lines()) {
-                stat_panel.set_lines(cur_lines);
-                stat_panel.set_score(cur_score);
-            }
+        if (current_lines > stat_panel.get_lines()) {
+            stat_panel.set_lines(current_lines);
+            stat_panel.set_score(current_score);
         }
 
-        window.clear();
+        window.clear(sf::Color(90, 90, 90));
         window.draw(field);
         window.draw(next_panel);
         window.draw(stat_panel);

@@ -1,12 +1,3 @@
-
-// gl_Color
-// gl_FragColor
-// gl_TexCoord[0].xy
-
-// function easeInSine(x: number): number {
-//   return 1 - Math.cos((x * Math.PI) / 2);
-// }
-
 uniform float time;
 uniform float max_time;
 
@@ -21,16 +12,15 @@ float rand(vec2 co){
     return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453);
 }
 
-
 void main()
 {
     vec2 coord = gl_TexCoord[0].xy;
     float cur_time = time;
 
     if (cur_time > max_time) {
-        // cur_time = cur_time - (cur_time +  max_time);
 		cur_time = 0.0;
     }
+
     if (rand(coord) < 0.001) {
         gl_FragColor = vec4(gl_Color.xyz, 1);
     } else {

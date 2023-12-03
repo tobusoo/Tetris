@@ -1,22 +1,13 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.22)
 
-project(tetris VERSION 0.0)
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
-
-set(FLAGS "-Wall -g -I include")
-add_definitions(${FLAGS})
-
-add_executable(tetris src/main.cpp)
-
-add_custom_target(copy-files ALL
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-    ${PROJECT_SOURCE_DIR}/resource
-    ${PROJECT_BINARY_DIR}/resource
-    COMMENT "COPY RESOURCE FILES"
+project(
+    Tetris
+    VERSION 1.0
+    LANGUAGES CXX   
 )
 
-add_dependencies(tetris copy-files)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
 
-find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
-target_link_libraries(tetris sfml-graphics sfml-audio)
+add_subdirectory(src)
+include_directories(${CMAKE_SOURCE_DIR}/include)

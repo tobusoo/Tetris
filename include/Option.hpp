@@ -5,3 +5,4 @@
 #define CELL_SIZE 25
 #define N 20
 #define M 10
+#define FPS 144
