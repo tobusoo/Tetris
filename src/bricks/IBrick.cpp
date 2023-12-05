@@ -13,7 +13,7 @@ sf::Vector2i IBrick::get_center_position() const noexcept
     return position[1];
 }
 
-void IBrick::rotate() noexcept
+void IBrick::right_rotate() noexcept
 {
     if (state == 0) {
         state = 1;
@@ -32,4 +32,16 @@ void IBrick::rotate() noexcept
         position[2] += sf::Vector2i(1, -1);
         position[3] += sf::Vector2i(2, -2);
     }
+}
+
+void IBrick::left_rotate() noexcept
+{
+}
+
+void IBrick::rotate(bool is_right) noexcept
+{
+    if (is_right)
+        right_rotate();
+    else
+        left_rotate();
 }

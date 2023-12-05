@@ -17,12 +17,15 @@ public:
 
     sf::Vector2i get_center_position() const noexcept;
 
-    void rotate() noexcept;
+    void rotate(bool is_right = true) noexcept;
     void move(const sf::Vector2i dxdy) noexcept;
 
     void draw(sf::RenderTarget& target, sf::RenderStates state) const;
 
 protected:
+    void right_rotate() noexcept;
+    void left_rotate() noexcept;
+
     sf::RectangleShape bricks[4];
     sf::Vector2f in_window_pos;
 

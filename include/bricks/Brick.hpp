@@ -24,11 +24,14 @@ public:
     bool is_out_of_screen(
             sf::Vector2i& leftmost, sf::Vector2i& rightmost) const noexcept;
 
-    virtual void rotate() noexcept = 0;
+    virtual void rotate(bool is_right = true) noexcept = 0;
     void reset_state() noexcept;
     void move(const sf::Vector2i dxdy, bool check_collision = true) noexcept;
 
 protected:
+    virtual void right_rotate() noexcept = 0;
+    virtual void left_rotate() noexcept = 0;
+
     sf::Vector2i position[4];
     sf::Color color;
     int state = 0;

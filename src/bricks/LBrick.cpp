@@ -14,7 +14,7 @@ sf::Vector2i LBrick::get_center_position() const noexcept
     return position[1];
 }
 
-void LBrick::rotate() noexcept
+void LBrick::right_rotate() noexcept
 {
     switch (state) {
     case 0:
@@ -56,4 +56,16 @@ void LBrick::rotate() noexcept
     default:
         break;
     }
+}
+
+void LBrick::left_rotate() noexcept
+{
+}
+
+void LBrick::rotate(bool is_right) noexcept
+{
+    if (is_right)
+        right_rotate();
+    else
+        left_rotate();
 }

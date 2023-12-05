@@ -25,9 +25,19 @@ sf::Vector2i DrawableBrick::get_center_position() const noexcept
     return position[0];
 }
 
-// no need this func
-void DrawableBrick::rotate() noexcept
+void DrawableBrick::left_rotate() noexcept
 {
+}
+
+void DrawableBrick::right_rotate() noexcept
+{
+}
+
+// no need this func
+void DrawableBrick::rotate(bool is_right) noexcept
+{
+    if (is_right)
+        return;
 }
 
 void DrawableBrick::set_size(float size_)

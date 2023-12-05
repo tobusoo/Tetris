@@ -23,7 +23,8 @@ public:
     update(Brick& brick,
            sf::Vector2i dxdy,
            float dt,
-           bool rotate_key,
+           bool right_rotate,
+           bool left_rotate,
            bool fast_down) noexcept;
 
     bool
@@ -34,7 +35,8 @@ public:
 private:
     void draw(sf::RenderTarget& target, sf::RenderStates state) const;
 
-    void rotate_brick(Brick& brick, sf::Vector2i prev_pos[4]) noexcept;
+    void rotate_brick(
+            Brick& brick, sf::Vector2i prev_pos[4], bool is_right) noexcept;
     void remove_filled_line(int i) noexcept;
     void instant_drop(Brick& brick, sf::Vector2i prev_pos[4]) noexcept;
     void movement_collision(

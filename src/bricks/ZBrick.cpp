@@ -14,7 +14,7 @@ sf::Vector2i ZBrick::get_center_position() const noexcept
     return position[2];
 }
 
-void ZBrick::rotate() noexcept
+void ZBrick::right_rotate() noexcept
 {
     switch (state) {
     case 0:
@@ -56,4 +56,16 @@ void ZBrick::rotate() noexcept
     default:
         break;
     }
+}
+
+void ZBrick::left_rotate() noexcept
+{
+}
+
+void ZBrick::rotate(bool is_right) noexcept
+{
+    if (is_right)
+        right_rotate();
+    else
+        left_rotate();
 }

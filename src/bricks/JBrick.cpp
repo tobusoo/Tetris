@@ -14,7 +14,7 @@ sf::Vector2i JBrick::get_center_position() const noexcept
     return position[2];
 }
 
-void JBrick::rotate() noexcept
+void JBrick::right_rotate() noexcept
 {
     switch (state) {
     case 0:
@@ -56,4 +56,16 @@ void JBrick::rotate() noexcept
     default:
         break;
     }
+}
+
+void JBrick::left_rotate() noexcept
+{
+}
+
+void JBrick::rotate(bool is_right) noexcept
+{
+    if (is_right)
+        right_rotate();
+    else
+        left_rotate();
 }

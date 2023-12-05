@@ -14,7 +14,7 @@ sf::Vector2i TBrick::get_center_position() const noexcept
     return position[1];
 }
 
-void TBrick::rotate() noexcept
+void TBrick::right_rotate() noexcept
 {
     switch (state) {
     case 0:
@@ -56,4 +56,16 @@ void TBrick::rotate() noexcept
     default:
         break;
     }
+}
+
+void TBrick::left_rotate() noexcept
+{
+}
+
+void TBrick::rotate(bool is_right) noexcept
+{
+    if (is_right)
+        right_rotate();
+    else
+        left_rotate();
 }

@@ -89,6 +89,7 @@ bool Field::collide(const Brick& brick, sf::Vector2i fix_collide[4]) noexcept
         }
         if (fill_matrix[current_pos[i].y][current_pos[i].x] == 1
             && fix_collide) {
+            // 69 - magic number to detect unresolved collisions
             fix_collide[0].x = 69;
             return true;
         }
@@ -187,11 +188,12 @@ void Field::update(
         sf::Vector2i dxdy,
         float dt,
         bool right_rotate,
+        bool left_rotate,
         bool fast_down) noexcept
 {
     sf::Vector2i positions[4];
-    if (right_rotate) {
-        rotate_brick(brick, positions);
+    if (!fast_drop && (right_rotate || left_rotate)) {
+        rotate_brick(brick, positions, right_rotate == true);
     }
 
     if (effect_timer.getElapsedTime().asSeconds() <= effect_max_time) {
@@ -203,9 +205,6 @@ void Field::update(
 
     if (fast_down) {
         instant_drop(brick, positions);
-        for (int i = 0; i < 4; i++) {
-            drop_effect[i].update();
-        }
         return;
     }
 
@@ -283,10 +282,11 @@ void Field::remove_filled_line(int i) noexcept
     }
 }
 
-void Field::rotate_brick(Brick& brick, sf::Vector2i prev_pos[4]) noexcept
+void Field::rotate_brick(
+        Brick& brick, sf::Vector2i prev_pos[4], bool is_right) noexcept
 {
     brick.write_position(prev_pos);
-    brick.rotate();
+    brick.rotate(is_right);
 
     sf::Vector2i leftmost_pos;
     sf::Vector2i rightmost_pos;
@@ -302,6 +302,7 @@ void Field::rotate_brick(Brick& brick, sf::Vector2i prev_pos[4]) noexcept
     // Check collision with field
     sf::Vector2i fix_collide[4];
     if (collide(brick, fix_collide)) {
+        // 69 - magic number to detect unresolved collisions
         if (fix_collide[0].x == 69) {
             brick.reset_state();
             brick.set_position(prev_pos);
@@ -352,7 +353,7 @@ void Field::instant_drop(Brick& brick, sf::Vector2i prev_pos[4]) noexcept
     bottom_collision = true;
     fast_drop = true;
     effect_timer.restart();
-    set_brick(brick);
+    // set_brick(brick);
 }
 
 void Field::movement_collision(

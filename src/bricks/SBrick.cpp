@@ -14,7 +14,7 @@ sf::Vector2i SBrick::get_center_position() const noexcept
     return position[1];
 }
 
-void SBrick::rotate() noexcept
+void SBrick::right_rotate() noexcept
 {
     switch (state) {
     case 0:
@@ -56,4 +56,16 @@ void SBrick::rotate() noexcept
     default:
         break;
     }
+}
+
+void SBrick::left_rotate() noexcept
+{
+}
+
+void SBrick::rotate(bool is_right) noexcept
+{
+    if (is_right)
+        right_rotate();
+    else
+        left_rotate();
 }

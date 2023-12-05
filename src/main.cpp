@@ -73,11 +73,11 @@ int main()
             }
         }
 
-        if (left_rotate)
-            std::cout << "Добавь уже левый поворот...\n";
-        field.update((*brick), movement, dt, right_rotate, fast_down);
+        field.update(
+                *brick, movement, dt, right_rotate, left_rotate, fast_down);
         movement = {0, 0};
         right_rotate = false;
+        left_rotate = false;
         fast_down = false;
 
         if (field.collide(*brick) && field.need_new_brick()) {

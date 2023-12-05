@@ -15,7 +15,19 @@ sf::Vector2i OBrick::get_center_position() const noexcept
     return position[0];
 }
 
-void OBrick::rotate() noexcept
+void OBrick::right_rotate() noexcept
 {
     // No need to rotate, because it's square.
+}
+
+void OBrick::left_rotate() noexcept
+{
+    // No need to rotate, because it's square.
+}
+
+void OBrick::rotate(bool is_right) noexcept
+{
+    // No need to rotate, because it's square.
+    if (is_right)
+        return;
 }
