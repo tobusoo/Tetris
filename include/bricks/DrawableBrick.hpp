@@ -11,9 +11,9 @@ public:
     void set_color(sf::Color clr) noexcept;
     void set_position(const Brick& brick) noexcept;
     void set_position(const sf::Vector2i pos[4]) noexcept;
-    void setOutlineThickness(float thnickness) noexcept;
+    void setOutlineThickness(float thickness) noexcept;
     void setOutlineColor(sf::Color clr) noexcept;
-    void set_size(float size_);
+    void set_size(float size_) noexcept;
 
     sf::Vector2i get_center_position() const noexcept;
 

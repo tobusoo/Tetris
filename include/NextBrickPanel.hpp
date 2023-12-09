@@ -1,14 +1,12 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include <iostream>
 
-#include <Bricks.h>
-#include <BricksGenerator.hpp>
+#include <bricks/Brick.hpp>
 
 class NextBrickPanel : public sf::Drawable {
 public:
-    NextBrickPanel(sf::Vector2f position, sf::Vector2f size) noexcept;
+    NextBrickPanel(sf::Vector2f position) noexcept;
     void set_brick(Brick& brick) noexcept;
 
 protected:

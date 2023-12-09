@@ -4,7 +4,7 @@
 
 class StatisticPanel : public sf::Drawable {
 public:
-    StatisticPanel(sf::Vector2f position, sf::Vector2f size);
+    StatisticPanel(sf::Vector2f position);
 
     void set_lines(size_t n) noexcept;
     void set_score(size_t n) noexcept;
@@ -13,6 +13,8 @@ public:
     size_t get_lines() const noexcept;
     size_t get_score() const noexcept;
     size_t get_i_brick(unsigned short i) const noexcept;
+
+    void reset() noexcept;
 
 protected:
     void draw(sf::RenderTarget& target, sf::RenderStates state) const;
@@ -30,7 +32,6 @@ private:
     size_t score;
 
     sf::Vector2f panel_position;
-    sf::Vector2f panel_size;
 
-    sf::RectangleShape backgroung;
+    sf::RectangleShape background;
 };

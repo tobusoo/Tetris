@@ -5,13 +5,11 @@
 
 class BricksGenerator {
 public:
-    BricksGenerator() : random_engine(random_device()), dist(0, BRICKS_N - 1)
-    {
-    }
+    BricksGenerator();
 
     unsigned short get_last_i() const noexcept;
     Brick* get_random_brick() noexcept;
-    Brick* get_i_brick(unsigned short i);
+    Brick* get_i_brick(unsigned short i) noexcept;
 
 private:
     std::random_device random_device;

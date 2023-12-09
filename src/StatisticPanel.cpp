@@ -4,31 +4,30 @@
 #include <BricksGenerator.hpp>
 #include <StatisticPanel.hpp>
 
-StatisticPanel::StatisticPanel(sf::Vector2f position, sf::Vector2f size)
+StatisticPanel::StatisticPanel(sf::Vector2f position)
     : lines(0),
       score(0),
       panel_position(position),
-      panel_size(size),
-      backgroung(size)
+      background({200, CELL_SIZE * N + 1})
 {
     if (!font.loadFromFile("resource/font.otf")) {
         exit(EXIT_FAILURE);
     }
 
-    backgroung.setFillColor(sf::Color::Transparent);
-    backgroung.setOutlineColor(sf::Color::White);
-    backgroung.setOutlineThickness(1);
-    backgroung.setPosition(position);
+    background.setFillColor(sf::Color::Transparent);
+    background.setOutlineColor(sf::Color(224, 224, 224, 255 / 2));
+    background.setOutlineThickness(3);
+    background.setPosition(position);
 
     lines_text.setFont(font);
     lines_text.setFillColor(sf::Color::White);
-    lines_text.setCharacterSize(30);
+    lines_text.setCharacterSize(24);
     lines_text.setPosition(position + sf::Vector2f(0, 0));
     lines_text.setString("Lines: 0");
 
     score_text.setFont(font);
     score_text.setFillColor(sf::Color::White);
-    score_text.setCharacterSize(30);
+    score_text.setCharacterSize(24);
     score_text.setPosition(position + sf::Vector2f(0, 30));
     score_text.setString("Score: 0");
 
@@ -39,16 +38,16 @@ StatisticPanel::StatisticPanel(sf::Vector2f position, sf::Vector2f size)
         bricks_count[i] = 0;
 
         bricks[i].set_window_position(
-                sf::Vector2f(position.x, position.y + i * 50 + 70));
-        bricks[i].set_size(15);
+                sf::Vector2f(position.x + 10, position.y + i * 80 + 70));
+        bricks[i].set_size(25);
         bricks[i].set_color(brick->get_color());
         bricks[i].set_position(*brick);
 
         bricks_text[i].setFont(font);
         bricks_text[i].setFillColor(sf::Color::White);
-        bricks_text[i].setCharacterSize(15);
+        bricks_text[i].setCharacterSize(24);
         bricks_text[i].setPosition(
-                sf::Vector2f(position.x + 65, position.y + i * 50 + 70));
+                sf::Vector2f(position.x + 120, position.y + i * 80 + 70));
         bricks_text[i].setString("0");
 
         delete brick;
@@ -92,10 +91,23 @@ size_t StatisticPanel::get_i_brick(unsigned short i) const noexcept
     return bricks_count[i];
 }
 
+void StatisticPanel::reset() noexcept
+{
+    lines = 0;
+    score = 0;
+    for (int i = 0; i < BRICKS_N; i++) {
+        bricks_count[i] = 0;
+        bricks_text[i].setString("0");
+    }
+
+    set_lines(lines);
+    set_score(score);
+}
+
 void StatisticPanel::draw(
         sf::RenderTarget& target, sf::RenderStates state) const
 {
-    target.draw(backgroung, state);
+    target.draw(background, state);
     target.draw(lines_text, state);
     target.draw(score_text, state);
 

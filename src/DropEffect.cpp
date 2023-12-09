@@ -30,32 +30,32 @@ DropEffect::DropEffect() : DropEffect(sf::Color::White, {0, 0}, {0, 0}, 0)
 {
 }
 
-void DropEffect::set_size(sf::Vector2f size_)
+void DropEffect::set_size(sf::Vector2f size_) noexcept
 {
     size = size_;
     diff = size.y / max_time / FPS;
     body.setSize(size);
 }
 
-void DropEffect::set_max_time(float max_time_)
+void DropEffect::set_max_time(float max_time_) noexcept
 {
     max_time = max_time_;
     diff = size.y / max_time / FPS;
     shader.setUniform("max_time", max_time);
 }
 
-void DropEffect::set_color(sf::Color clr)
+void DropEffect::set_color(sf::Color clr) noexcept
 {
     body.setFillColor(clr);
 }
 
-void DropEffect::set_position(sf::Vector2f position_)
+void DropEffect::set_position(sf::Vector2f position_) noexcept
 {
     position = position_;
     body.setPosition(position);
 }
 
-void DropEffect::update()
+void DropEffect::update() noexcept
 {
     auto size = body.getSize();
     auto pos = body.getPosition();
@@ -70,7 +70,7 @@ void DropEffect::update()
     shader.setUniform("time", static_cast<float>(elapsed_time));
 }
 
-void DropEffect::reset()
+void DropEffect::reset() noexcept
 {
     time.restart();
     body.setPosition(position);

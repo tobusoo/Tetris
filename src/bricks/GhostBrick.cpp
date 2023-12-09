@@ -20,10 +20,3 @@ void GhostBrick::set_bricks_position()
                 pos.y * CELL_SIZE + in_window_pos.y + padding / 2);
     }
 }
-
-void GhostBrick::draw(sf::RenderTarget& target, sf::RenderStates state) const
-{
-    for (auto& i : bricks) {
-        target.draw(i, state);
-    }
-}

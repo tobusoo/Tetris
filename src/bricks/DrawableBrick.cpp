@@ -40,7 +40,7 @@ void DrawableBrick::rotate(bool is_right) noexcept
         return;
 }
 
-void DrawableBrick::set_size(float size_)
+void DrawableBrick::set_size(float size_) noexcept
 {
     size = size_;
     for (int i = 0; i < 4; i++) {
@@ -57,10 +57,10 @@ void DrawableBrick::move(const sf::Vector2i dxdy) noexcept
         i += dxdy;
 }
 
-void DrawableBrick::setOutlineThickness(float thnickness) noexcept
+void DrawableBrick::setOutlineThickness(float thickness) noexcept
 {
     for (int i = 0; i < 4; i++) {
-        bricks[i].setOutlineThickness(thnickness);
+        bricks[i].setOutlineThickness(thickness);
     }
 }
 

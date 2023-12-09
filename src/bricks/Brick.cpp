@@ -42,7 +42,7 @@ sf::Vector2i Brick::get_rightmost_position() const noexcept
     return rightmost;
 }
 
-sf::Vector2i Brick::get_highter_position() const noexcept
+sf::Vector2i Brick::get_highest_position() const noexcept
 {
     sf::Vector2i highter = {position[0].x, position[0].y};
 
@@ -72,7 +72,7 @@ void Brick::set_color(sf::Color clr) noexcept
     color = clr;
 }
 
-const sf::Color Brick::get_color() const noexcept
+sf::Color Brick::get_color() const noexcept
 {
     return color;
 }
@@ -86,7 +86,7 @@ void Brick::set_position(const sf::Vector2i pos[4]) noexcept
 bool Brick::is_out_of_screen(
         sf::Vector2i& leftmost, sf::Vector2i& rightmost) const noexcept
 {
-    sf::Vector2i highter = get_highter_position();
+    sf::Vector2i highter = get_highest_position();
     leftmost = get_leftmost_position();
     rightmost = get_rightmost_position();
 
@@ -101,7 +101,7 @@ bool Brick::is_out_of_screen() const noexcept
 {
     sf::Vector2i leftmost = get_leftmost_position();
     sf::Vector2i rightmost = get_rightmost_position();
-    sf::Vector2i highter = get_highter_position();
+    sf::Vector2i highter = get_highest_position();
 
     if (leftmost.x < 0 || rightmost.x > M - 1 || highter.y < 0) {
         return true;

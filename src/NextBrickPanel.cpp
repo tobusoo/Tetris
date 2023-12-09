@@ -1,13 +1,11 @@
 #include <SFML/Graphics.hpp>
-#include <iostream>
 
 #include <Bricks.h>
 #include <BricksGenerator.hpp>
 #include <NextBrickPanel.hpp>
 
-NextBrickPanel::NextBrickPanel(
-        sf::Vector2f position, sf::Vector2f size) noexcept
-    : background(size)
+NextBrickPanel::NextBrickPanel(sf::Vector2f position) noexcept
+    : background({200, 150})
 {
     if (!font.loadFromFile("resource/font.otf")) {
         exit(EXIT_FAILURE);
@@ -15,17 +13,17 @@ NextBrickPanel::NextBrickPanel(
 
     background.setPosition(position);
     background.setFillColor(sf::Color::Transparent);
-    background.setOutlineThickness(1);
-    background.setOutlineColor(sf::Color::White);
+    background.setOutlineThickness(3);
+    background.setOutlineColor(sf::Color(224, 224, 224, 255 / 2));
 
     text.setFont(font);
     text.setFillColor(sf::Color::White);
     text.setCharacterSize(30);
-    text.setPosition(position + sf::Vector2f(20, 0));
+    text.setPosition(position + sf::Vector2f(200 / 2 - 30, 0));
     text.setString("NEXT");
 
-    next_brick.set_size(25);
-    next_brick.set_window_position(position + sf::Vector2f(10, 40));
+    next_brick.set_size(CELL_SIZE);
+    next_brick.set_window_position(position + sf::Vector2f(60, 60));
 }
 
 void NextBrickPanel::set_brick(Brick& brick) noexcept

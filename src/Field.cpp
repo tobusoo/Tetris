@@ -139,7 +139,7 @@ size_t Field::get_score() const noexcept
     return score;
 }
 
-void Field::check_lines() noexcept
+bool Field::check_lines() noexcept
 {
     size_t current_lines = 0;
     for (int i = 0; i < N; i++) {
@@ -171,10 +171,32 @@ void Field::check_lines() noexcept
         std::string str = "+" + std::to_string(current_score);
         text_effect.setString(str);
         text_effect.show();
+        score += current_score;
+        lines += current_lines;
+
+        return true;
     }
 
-    score += current_score;
-    lines += current_lines;
+    return false;
+}
+
+void Field::reset_game() noexcept
+{
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < M; j++) {
+            fill_matrix[i][j] = false;
+            matrix[i][j].setFillColor(sf::Color::Transparent);
+        }
+    }
+
+    bottom_collision = false;
+    fast_drop = false;
+
+    lines = 0;
+    score = 0;
+
+    time_to_move.restart();
+    auto_drop.restart();
 }
 
 void Field::reset_time() noexcept
@@ -192,10 +214,6 @@ void Field::update(
         bool fast_down) noexcept
 {
     sf::Vector2i positions[4];
-    if (!fast_drop && (right_rotate || left_rotate)) {
-        rotate_brick(brick, positions, right_rotate == true);
-    }
-
     if (effect_timer.getElapsedTime().asSeconds() <= effect_max_time) {
         for (int i = 0; i < 4; i++) {
             drop_effect[i].update();
@@ -206,6 +224,10 @@ void Field::update(
     if (fast_down) {
         instant_drop(brick, positions);
         return;
+    }
+
+    if (!fast_drop && (right_rotate || left_rotate)) {
+        rotate_brick(brick, positions, right_rotate);
     }
 
     brick.write_position(positions);
@@ -244,7 +266,7 @@ bool Field::need_new_brick() noexcept
     return time_to_move.getElapsedTime().asSeconds() >= 0.5 && bottom_collision;
 }
 
-bool Field::end() const noexcept
+bool Field::is_end() const noexcept
 {
     for (int i = 0; i < M; i++) {
         if (fill_matrix[0][i])
@@ -314,9 +336,14 @@ void Field::rotate_brick(
             }
         }
     }
-    auto top = brick.get_highter_position();
+    auto top = brick.get_highest_position();
+    auto low = brick.get_lower_position();
 
     if (top.y < 0) {
+        brick.reset_state();
+        brick.set_position(prev_pos);
+    }
+    if (low.y > N - 1) {
         brick.reset_state();
         brick.set_position(prev_pos);
     }
@@ -353,7 +380,6 @@ void Field::instant_drop(Brick& brick, sf::Vector2i prev_pos[4]) noexcept
     bottom_collision = true;
     fast_drop = true;
     effect_timer.restart();
-    // set_brick(brick);
 }
 
 void Field::movement_collision(

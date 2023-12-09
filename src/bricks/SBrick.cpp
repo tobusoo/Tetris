@@ -60,6 +60,46 @@ void SBrick::right_rotate() noexcept
 
 void SBrick::left_rotate() noexcept
 {
+    switch (state) {
+    case 0:
+        position[0] += sf::Vector2i(1, 1);
+        // position[1] += sf::Vector2i(0, 0);
+        position[2] += sf::Vector2i(-1, 1);
+        position[3] += sf::Vector2i(-2, 0);
+
+        prev_state = state;
+        state = 3;
+        break;
+    case 1:
+        position[0] += sf::Vector2i(-1, 1);
+        // position[1] += sf::Vector2i(0, 0);
+        position[2] += sf::Vector2i(-1, -1);
+        position[3] += sf::Vector2i(0, -2);
+
+        prev_state = state;
+        state = 0;
+        break;
+    case 2:
+        position[0] += sf::Vector2i(-1, -1);
+        // position[1] += sf::Vector2i(0, 0);
+        position[2] += sf::Vector2i(1, -1);
+        position[3] += sf::Vector2i(2, 0);
+
+        prev_state = state;
+        state = 1;
+        break;
+    case 3:
+        position[0] += sf::Vector2i(1, -1);
+        // position[1] += sf::Vector2i(0, 0);
+        position[2] += sf::Vector2i(1, 1);
+        position[3] += sf::Vector2i(0, 2);
+
+        prev_state = state;
+        state = 2;
+        break;
+    default:
+        break;
+    }
 }
 
 void SBrick::rotate(bool is_right) noexcept

@@ -18,7 +18,8 @@ public:
     size_t get_score() const noexcept;
 
     void reset_time() noexcept;
-    void check_lines() noexcept;
+    void reset_game() noexcept;
+    bool check_lines() noexcept;
     void
     update(Brick& brick,
            sf::Vector2i dxdy,
@@ -30,9 +31,9 @@ public:
     bool
     collide(const Brick& brick, sf::Vector2i fix_collide[4] = nullptr) noexcept;
     bool need_new_brick() noexcept;
-    bool end() const noexcept;
+    bool is_end() const noexcept;
 
-private:
+protected:
     void draw(sf::RenderTarget& target, sf::RenderStates state) const;
 
     void rotate_brick(

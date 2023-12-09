@@ -27,7 +27,7 @@ target_sources(
     Field.cpp
 )
 
-find_package(SFML 2.5 COMPONENTS graphics system window REQUIRED)
+find_package(SFML 2.5 COMPONENTS graphics system window audio REQUIRED)
 
 target_link_libraries(
   ${target_name}
@@ -35,6 +35,7 @@ target_link_libraries(
     sfml-graphics
     sfml-system
     sfml-window
+    sfml-audio
 )
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
